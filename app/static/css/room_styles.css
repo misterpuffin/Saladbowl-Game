@@ -97,6 +97,7 @@ li {
 
 .chat-messages {
   flex: 1;
+  overflow: auto;
 }
 
 .chat-input {

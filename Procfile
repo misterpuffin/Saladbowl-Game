@@ -1,1 +1,1 @@
-web: gunicorn salad_bowl:socketio
+web: gunicorn -k flask_sockets.worker chat:app
