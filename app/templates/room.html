@@ -1,0 +1,106 @@
+{% extends "template.html" %} {% block stylesheet %}<link
+  rel="stylesheet"
+  href="/static/css/room_styles.css"
+/>{% endblock %} {% block body %}
+<div class="players container-flex rounded shadow">
+  <ul id="playerList"></ul>
+</div>
+
+<div class="gameArea container-flex shadow rounded">
+  <!-- Game Board (hidden) -->
+  <div id="gameBoard" class="hidden container-fluid">
+    <h1 class="current-round">Round 1</h1>
+    <h3 class="player-turn hidden"></h3>
+
+    <div class="player-circle">
+      <div class="redTeam"></div>
+      <div class="blueTeam"></div>
+    </div>
+
+    <div id="scoreBoard">
+      <ul>
+        <li class="redScore">Red:</li>
+        <li class="blueScore">Blue:</li>
+      </ul>
+    </div>
+  </div>
+  <!-- Start Games Button -->
+  <button id="startGame" class="btn btn-lg btn-warning hidden hostFunction">
+    Start Game
+  </button>
+  <!-- List of Players -->
+</div>
+
+<!-- Chat Box -->
+<div class="chat shadow rounded rounded container-flex">
+  <div class="chat-messages">
+    <ul id="messageList"></ul>
+  </div>
+
+  <div class="chat-input">
+    <div class="chat-text form-group">
+      <input id="message" type="text" name="message" class="form-control" />
+    </div>
+    <div class="chat-send">
+      <button id="send" class="btn btn-success">Send</button>
+    </div>
+  </div>
+</div>
+
+<div id="getWords" class="hidden pop-up card shadow">
+  <h4></h4>
+  <div class="form-group">
+    <input
+      type="text"
+      name="word"
+      placeholder="Input Word Here"
+      class="form-control"
+    />
+  </div>
+
+  <button id="addWord" class="btn btn-warning">Enter word</button>
+</div>
+
+<div id="your-turn" class="hidden pop-up card shadow">
+  <h5></h5>
+  <div id="current-word" class="hidden">
+    <h3></h3>
+    <button class="btn btn-danger wrong">Skip</button>
+    <button class="btn btn-success correct">Correct</button>
+  </div>
+  <button class="btn btn-lg btn-primary ready">
+    Click here when you're ready
+  </button>
+</div>
+
+<div id="instructions" class="hidden pop-up card shadow">
+  <div class="round1 hidden">
+    <h1>Get ready for round 1!</h1>
+    <p>
+      In this round, you can use as many words to describe the word above. If
+      the word is too difficult for you, you are allowed to skip and get a new
+      card. Take note, if you accidentally say the word on your card, you have
+      to skip!
+    </p>
+  </div>
+  <div class="round2 hidden">
+    <h1>Get ready for round 2!</h1>
+    <p>
+      In this round, you have to act out your word! Anything but speaking is
+      allowed, feel free to stand up, move around, anything to let your
+      teammates guess the word!
+    </p>
+  </div>
+  <div class="round3 hidden">
+    <h1>Get ready for round 3!</h1>
+    <p>
+      In this round, test your chemistry with your teammates! You can only say 1
+      word, a code that allows your teammates to guess which word you were
+      referring to.
+    </p>
+  </div>
+  <button class="done-instructions btn btn-warning">Done reading!</button>
+</div>
+<!-- Get Words Interface -->
+
+{% endblock %} {% block script %} {% endblock %}
