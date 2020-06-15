@@ -1,1 +1,1 @@
-web: gunicorn salad_bowl:salad_bowl
+web: gunicorn salad_bowl:app
