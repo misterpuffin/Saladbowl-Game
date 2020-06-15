@@ -1,1 +1,1 @@
-web: gunicorn -k flask_sockets.worker chat:app
+web: gunicorn -k eventlet salad_bowl:app
