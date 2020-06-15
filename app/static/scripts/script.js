@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({ transports: ["websocket"] });
 
 //function to get room_id from the url
 function getRoom(url) {
