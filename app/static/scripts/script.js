@@ -256,4 +256,7 @@ socket.on("nextRound", function (data) {
 
 socket.on("gameEnded", function (data) {
   $(".current-round").text("Game Ended!");
+  var timeout = setTimeout(function () {
+    location.reload();
+  }, 10000);
 });

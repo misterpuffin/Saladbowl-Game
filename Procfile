@@ -1,1 +1,1 @@
-web: gunicorn salad_bowl:app
+web: gunicorn salad_bowl:socketio

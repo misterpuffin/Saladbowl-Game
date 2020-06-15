@@ -118,6 +118,8 @@ def end_turn(data):
     if len(rooms[room_id].currentWordList) == 0:
         if rooms[room_id].round == 3:
             rooms[room_id].endGame()
+            # Temporary way to stop the game
+            del rooms[room_id]
             emit("gameEnded", room=room_id)
             return
         else:
