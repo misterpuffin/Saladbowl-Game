@@ -28,10 +28,10 @@ def index():
             return redirect(url_for("index"))
 
         # Checks if the user is kicked from the room
-        elif 'username' in session:
-            if session['username'] in rooms[room_id].kickedPlayers:
+        elif session.get("username") is not None:
+            if session.get("username") in rooms[room_id].kickedPlayers:
                 flash("You have been kicked from this room")
-                print(rooms[room_id].kickedPlayers)
+
                 return redirect(url_for("index"))
             else:
                 session['username'] = username
@@ -42,6 +42,7 @@ def index():
         else:
             session['username'] = username
             session['room'] = room_id
+            print(session)
             rooms[room_id].playersList.append(session['username'])
         return redirect(url_for("room", room_id = unquote(room_id)))
 
@@ -52,21 +53,21 @@ def index():
 def room(room_id):
     # Checks if user has already joined from the index page
     room_id = quote(room_id)
-    if 'room' not in session or room_id not in rooms:
+    if session.get('room') is None or room_id not in rooms:
         return redirect(url_for("index"))
 
     # Checks if user is in the wrong room
-    if session['room'] != room_id:
-        if session['room'] in rooms and session['username'] in rooms[room_id].playersList:
+    if session.get("room") != room_id:
+        if session.get("room") in rooms and session.get("username") in rooms[room_id].playersList:
             return redirect(url_for("room", room_id = unquote(session['room'])))
 
     # Checks if user has been kicked
-    if session['username'] in rooms[room_id].kickedPlayers:
+    if session.get("username") in rooms[room_id].kickedPlayers:
         flash("You have been kicked from this room")
         return redirect(url_for("index"))
 
     # Checks if username is in the room
-    if session['username'] not in rooms[room_id].playersList:
+    if session.get("username") not in rooms[room_id].playersList:
         return redirect(url_for("index"))
 
     # Successfully joined
@@ -86,7 +87,7 @@ def create():
             session['username'] = request.form.get("username")
             session['room'] = room_id
             rooms[room_id] = Room(room_id, wordsPerPlayer, turnTimer)
-            rooms[room_id].playersList.append(session['username'])
+            rooms[room_id].playersList.append(session.get("username"))
 
         # Room already exists
         else: 

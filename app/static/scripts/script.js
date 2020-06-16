@@ -1,4 +1,4 @@
-var socket = io.connect("https://" + document.domain + ":" + location.port);
+var socket = io();
 
 // Sets the const room_id from the url
 function getRoom(url) {
@@ -9,14 +9,10 @@ const room_id = getRoom(window.location.href);
 socket.on("connect", function () {
   // Set up "leave" callback when user closes the page
   $(window).on("beforeunload", function () {
-    socket.emit("leave", { room: room_id });
+    socket.disconnect();
   });
-  // Joins the room
   socket.emit("join", { room: room_id });
 });
-
-//joins the room
-
 //***** MESSAGES SENT *****
 
 //sends message
