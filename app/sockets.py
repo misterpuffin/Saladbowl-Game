@@ -15,21 +15,24 @@ def handle_message(data):
 @socketio.on("join")
 def on_join(data):
     room_id = data['room']
-    if session['username'] in rooms[room_id].players:
-        rooms[room_id].addPlayer(request.sid, session['username'])
+    rooms[room_id].playerCount += 1
+    # Either adds or updates the player info in global rooms var
+    rooms[room_id].addPlayer(request.sid, session['username'])
+    # Connects socket to the room
+    join_room(room_id)
+    if session['username'] in rooms[room_id].disconnectedPlayers:
         on_rejoin(room_id)
     else:
-        rooms[room_id].addPlayer(request.sid, session['username'])
         # First player is made a host
         if len(rooms[room_id].players) == 1:
             rooms[room_id].host = session['username']
-        # Connects the socket to the room
-        join_room(room_id)
+            emit("host", room=rooms[room_id].players[rooms[room_id].host])
         # Updates the player list
         emit("updatePlayerList", {'players': rooms[room_id].players, 'host': rooms[room_id].host}, room=room_id)
         emit("host", room=rooms[room_id].players[rooms[room_id].host])
         # Sends message
         send(session['username'] + ' has entered the room.', room=room_id)
+
 
 def on_rejoin(room_id):
     room = rooms[room_id]
@@ -50,7 +53,7 @@ def on_rejoin(room_id):
             emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=request.sid)
             if room.currentPlayer == session['username']:
                 emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
-
+        
     
 
 @socketio.on("leave")
@@ -60,17 +63,24 @@ def on_leave(data):
     # Removes room_id from client side
     del session['room']
     # Removes player info from server side
-    del rooms[room_id].players[session['username']]
     # Disconnects socket from the room
     
     if session['username'] in rooms[room_id].kickedPlayers:
         send(session['username'] + ' has been kicked from the room.', room=room_id)
     else: 
+        if rooms[room_id].started:
+            rooms[room_id].disconnectedPlayers.append(session['username'])
         send(session['username'] + ' has left the room.', room=room_id)
+    
     leave_room(room_id, player)
     # Updates the player list
+    del rooms[room_id].players[session['username']]
     emit("updatePlayerList", {'players': rooms[room_id].players, 'host': rooms[room_id].host}, room=room_id)
-    emit("host", room=rooms[room_id].players[rooms[room_id].host])
+    if rooms[room_id].playerCount == 1:
+        del rooms[room_id]
+    else:
+        rooms[room_id].playerCount -= 1
+
 
 @socketio.on("removePlayer")
 def on_remove(data):

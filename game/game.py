@@ -6,6 +6,7 @@ class Room():
     def __init__(self, room_id, wordsPerPlayer, turnTimer):
         self.room_id = room_id
         self.players = {}
+        self.playerCount = 0
         self.playersList = []
         self.host = None
         self.wordlist = []

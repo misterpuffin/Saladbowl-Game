@@ -1,20 +1,21 @@
-var socket = io();
+var socket = io.connect("http://" + document.domain + ":" + location.port);
 
-//function to get room_id from the url
+// Sets the const room_id from the url
 function getRoom(url) {
   return url.split("/").pop();
 }
-
 const room_id = getRoom(window.location.href);
 
 socket.on("connect", function () {
-  console.log("New connection");
+  // Set up "leave" callback when user closes the page
+  $(window).on("beforeunload", function () {
+    socket.emit("leave", { room: room_id });
+  });
+  // Joins the room
+  socket.emit("join", { room: room_id });
 });
 
 //joins the room
-if (room_id.length != 0) {
-  socket.emit("join", { room: room_id });
-}
 
 //***** MESSAGES SENT *****
 
@@ -58,6 +59,9 @@ socket.on("updatePlayerList", function (data) {
           player +
           "'>x</button></li>"
       );
+      $(".removePlayer").click(function () {
+        socket.emit("removePlayer", { player: $(this).val(), room: room_id });
+      });
     }
     player_count++;
   }
@@ -82,10 +86,6 @@ socket.on("gameStarted", function () {
 
 socket.on("host", function () {
   $(".hostFunction").removeClass("hidden");
-  console.log("removed");
-  $(".removePlayer").click(function () {
-    socket.emit("removePlayer", { player: $(this).val(), room: room_id });
-  });
 });
 
 socket.on("getWords", function (data) {
