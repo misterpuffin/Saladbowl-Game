@@ -1,1 +1,1 @@
-web: gunicorn -k eventlet salad_bowl:app
+web: gunicorn -k eventlet -w 1 salad_bowl:app
