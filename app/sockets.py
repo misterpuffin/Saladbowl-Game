@@ -39,7 +39,7 @@ def on_rejoin(room_id):
     join_room(room_id)
     emit("updatePlayerList", {'players': rooms[room_id].players, 'host': rooms[room_id].host}, room=room_id)
     emit("host", room=rooms[room_id].players[rooms[room_id].host])
-    send( session.get('username') + ' has rejoined the room.', room=room_id)
+    send(session.get('username') + ' has rejoined the room.', room=room_id)
     if room.started:
         emit("gameStarted", room=request.sid)
         if len(room.wordDict[session.get('username')]) != room.wordsPerPlayer:

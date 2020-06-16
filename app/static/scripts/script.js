@@ -104,6 +104,14 @@ socket.on("getWords", function (data) {
     }
   });
   $("#getWords input").keyup(function () {
+    if ($(this).val() === "") {
+      $(this).addClass("disabled");
+      $(this).prop("disabled", true);
+    }
+    elif ($(this).val() === "") {
+      $(this).removeClass("disabled");
+      $(this).prop("disabled", false);
+    }
     if (event.keyCode === 13) {
       $("#addWord").click();
     }
