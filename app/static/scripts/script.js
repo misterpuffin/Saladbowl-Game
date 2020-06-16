@@ -1,4 +1,4 @@
-var socket = io.connect("http://" + document.domain + ":" + location.port);
+var socket = io.connect("https://" + document.domain + ":" + location.port);
 
 // Sets the const room_id from the url
 function getRoom(url) {
