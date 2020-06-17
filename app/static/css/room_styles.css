@@ -48,6 +48,7 @@ li {
   /* height: 600px; */
   display: flex;
   align-items: flex-start;
+  overflow: hidden;
 }
 
 .chat {
@@ -70,8 +71,10 @@ li {
 /* Game Board Elements */
 #gameBoard {
   text-align: center;
-  position: flex;
+  display: flex;
+  order: 2;
   flex-direction: column;
+  align-self: stretch;
 }
 #showPlayers {
   order: 1;
@@ -90,7 +93,7 @@ li {
 
 .player-circle {
   position: relative;
-  height: 50%;
+  flex: 1;
 }
 
 .player-circle span {
@@ -148,7 +151,7 @@ li {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 1200px) {
