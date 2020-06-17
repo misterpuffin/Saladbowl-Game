@@ -11,7 +11,7 @@ socket.on("connect", function () {
   $(window).on("beforeunload", function () {
     socket.disconnect();
   });
-  socket.emit("join", { room: room_id });
+  socket.emit("join");
 });
 //***** MESSAGES SENT *****
 
@@ -29,7 +29,7 @@ $("#message").keyup(function () {
 
 //starts game
 $("#startGame").click(function () {
-  socket.emit("startGame", { room: room_id });
+  socket.emit("startGame");
   $(this).remove();
 });
 
@@ -56,7 +56,7 @@ socket.on("updatePlayerList", function (data) {
           "'>x</button></li>"
       );
       $(".removePlayer").click(function () {
-        socket.emit("removePlayer", { player: $(this).val(), room: room_id });
+        socket.emit("removePlayer", { player: $(this).val() });
       });
     }
     player_count++;
@@ -93,7 +93,6 @@ socket.on("getWords", function (data) {
   $("#addWord").click(function () {
     socket.emit("addWord", {
       word: $("#getWords input").val(),
-      room: room_id,
     });
     i++;
     if (i <= wordsPerPlayer) {
@@ -107,8 +106,7 @@ socket.on("getWords", function (data) {
     if ($(this).val() === "") {
       $(this).addClass("disabled");
       $(this).prop("disabled", true);
-    }
-    elif ($(this).val() === "") {
+    } else if ($(this).val() === "") {
       $(this).removeClass("disabled");
       $(this).prop("disabled", false);
     }
@@ -191,7 +189,6 @@ socket.on("yourTurn", function (data) {
           $("#your-turn").addClass("hidden");
           socket.emit("endTurn", {
             correctWords: correctWords,
-            room: room_id,
           });
         }, 5000);
       }

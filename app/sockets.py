@@ -13,8 +13,8 @@ def handle_message(data):
 
 # When a new player joins
 @socketio.on("join")
-def on_join(data):
-    room_id = data['room']
+def on_join():
+    room_id = session.get("room")
     rooms[room_id].playerCount += 1
     # Either adds or updates the player info in global rooms var
     rooms[room_id].addPlayer(request.sid, session.get("username"))
@@ -83,7 +83,7 @@ def on_leave():
 
 @socketio.on("removePlayer")
 def on_remove(data):
-    room_id = data['room']
+    room_id = session.get("room")
     player = data['player']
     # Checks if the player sending message is a host
     if session.get('username') == rooms[room_id].host:
@@ -94,8 +94,8 @@ def on_remove(data):
         
 
 @socketio.on("startGame")
-def start_game(data):
-    room_id = data['room']
+def start_game():
+    room_id = session.get('room')
     rooms[room_id].started = True
     # Emits Game start for client side to initialize game board
     emit("gameStarted", room=room_id)
@@ -105,7 +105,7 @@ def start_game(data):
 @socketio.on("addWord")
 def add_word(data):
     word = data['word']
-    room_id = data['room']
+    room_id = session.get("room")
     username = session.get("username")
     rooms[room_id].addWord(word, username)
     if len(rooms[room_id].wordlist) >= len(rooms[room_id].players) * rooms[room_id].wordsPerPlayer: #if wordlist is max - 3 words per player
@@ -121,7 +121,7 @@ def add_word(data):
 def end_turn(data):
     print("ENDED")
     correctWords = data['correctWords']
-    room_id = data['room']
+    room_id = session.get("room")
     rooms[room_id].endTurn(correctWords)
     rooms[room_id].getNextPlayer()
     if len(rooms[room_id].currentWordList) == 0:
