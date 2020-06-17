@@ -33,6 +33,56 @@ $("#startGame").click(function () {
   $(this).remove();
 });
 
+$("#showPlayers").click(function () {
+  $(".players").animate({ width: "50%", padding: "5px", margin: "3%" });
+  $(this).css("display", "none");
+  $("#closePlayers").removeClass("hidden");
+});
+
+$("#showChat").click(function () {
+  $(".chat").animate({ width: "50%", padding: "5px", margin: "3%" });
+  $(this).css("display", "none");
+  $("#closeChat").removeClass("hidden");
+});
+
+$("#closePlayers").click(function () {
+  $(".players").animate({ width: "0", padding: "0", margin: "3% 0" });
+  $(this).addClass("hidden");
+  $("#showPlayers").css("display", "inline");
+});
+
+$("#closeChat").click(function () {
+  $(".chat").animate({ width: "0", padding: "0", margin: "3% 0" });
+  $(this).addClass("hidden");
+  $("#showChat").css("display", "inline");
+});
+
+$(window).resize(function () {
+  if ($(window).width() > 1200) {
+    $(".chat").css("width", "20%");
+    $(".chat").css("padding", "5px");
+    $(".chat").css("margin", "3%");
+    $(".players").css("width", "15%");
+    $(".players").css("padding", "5px");
+    $(".players").css("margin", "3%");
+    $("#showPlayers").css("display", "none");
+    $("#showChat").css("display", "none");
+    $("#closePlayers").addClass("hidden");
+    $("#closeChat").addClass("hidden");
+  } else {
+    $(".chat").css("width", "0");
+    $(".chat").css("padding", "0");
+    $(".chat").css("margin", "3% 0");
+    $(".players").css("width", "0");
+    $(".players").css("padding", "0");
+    $(".players").css("margin", "3% 0");
+    $("#showPlayers").css("display", "inline");
+    $("#showChat").css("display", "inline");
+    $("#closePlayers").removeClass("hidden");
+    $("#closeChat").removeClass("hidden");
+  }
+});
+
 //*****MESSAGES RECEIVED******
 
 //adds message to list

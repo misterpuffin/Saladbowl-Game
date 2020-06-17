@@ -3,6 +3,9 @@
   href="/static/css/room_styles.css"
 />{% endblock %} {% block body %}
 <div class="players container-flex rounded shadow">
+  <button id="closePlayers" class="btn btn-warning ml-auto hidden">
+    Close
+  </button>
   <ul id="playerList"></ul>
 </div>
 
@@ -28,11 +31,18 @@
   <button id="startGame" class="btn btn-lg btn-warning hidden hostFunction">
     Start Game
   </button>
+  <button id="showPlayers" class="btn btn-warning mr-auto">
+    Show Players
+  </button>
+  <button id="showChat" class="btn btn-warning ml-auto">
+    Show Chat
+  </button>
   <!-- List of Players -->
 </div>
 
 <!-- Chat Box -->
 <div class="chat shadow rounded rounded container-flex">
+  <button id="closeChat" class="btn btn-warning ml-auto hidden">Close</button>
   <div class="chat-messages">
     <ul id="messageList"></ul>
   </div>
