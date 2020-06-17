@@ -82,6 +82,7 @@ $(window).resize(function () {
       $("#closePlayers").removeClass("hidden");
       $("#closeChat").removeClass("hidden");
     }
+    lastWidth = $(window).width();
   }
 });
 
