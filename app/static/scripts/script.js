@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io.();
 
 // Sets the const room_id from the url
 function getRoom(url) {
