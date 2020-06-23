@@ -10,6 +10,10 @@
 </div>
 
 <div class="gameArea container-flex shadow rounded">
+  <div class="waiting-for-players hidden">
+    <h2>Waiting for players:</h2>
+    <ul></ul>
+  </div>
   <!-- Game Board (hidden) -->
   <div id="gameBoard" class="hidden container-fluid">
     <h1 class="current-round">Round 1</h1>
@@ -84,7 +88,7 @@
 </div>
 
 <div id="instructions" class="hidden pop-up card shadow">
-  <div class="round1 hidden">
+  <div class="round1 round-instructions hidden">
     <h1>Get ready for round 1!</h1>
     <p>
       In this round, you can use as many words to describe the word above. If
@@ -93,7 +97,7 @@
       to skip!
     </p>
   </div>
-  <div class="round2 hidden">
+  <div class="round2 round-instructions hidden">
     <h1>Get ready for round 2!</h1>
     <p>
       In this round, you have to act out your word! Anything but speaking is
@@ -101,7 +105,7 @@
       teammates guess the word!
     </p>
   </div>
-  <div class="round3 hidden">
+  <div class="round3 round-instructions hidden">
     <h1>Get ready for round 3!</h1>
     <p>
       In this round, test your chemistry with your teammates! You can only say 1

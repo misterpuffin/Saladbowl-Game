@@ -133,8 +133,9 @@ socket.on("gameStarted", function () {
   $("#startGame").addClass("hidden");
 });
 
-socket.on("host", function () {
+socket.on("host", function (data) {
   $(".hostFunction").removeClass("hidden");
+  if (data.started === true) $("#startGame").addClass("hidden");
 });
 
 socket.on("getWords", function (data) {
@@ -151,17 +152,21 @@ socket.on("getWords", function (data) {
     if (i <= wordsPerPlayer) {
       $("#getWords>h4").text("Word " + i);
       $("#getWords input").val("");
+      $("#addWord").addClass("disabled");
+      $("#addWord").prop("disabled", true);
     } else {
       $("#getWords").toggleClass("hidden");
     }
   });
+  $("#addWord").addClass("disabled");
+  $("#addWord").prop("disabled", true);
   $("#getWords input").keyup(function () {
     if ($(this).val() === "") {
-      $(this).addClass("disabled");
-      $(this).prop("disabled", true);
-    } else if ($(this).val() === "") {
-      $(this).removeClass("disabled");
-      $(this).prop("disabled", false);
+      $("#addWord").addClass("disabled");
+      $("#addWord").prop("disabled", true);
+    } else if ($(this).val() !== "") {
+      $("#addWord").removeClass("disabled");
+      $("#addWord").prop("disabled", false);
     }
     if (event.keyCode === 13) {
       $("#addWord").click();
@@ -169,8 +174,16 @@ socket.on("getWords", function (data) {
   });
 });
 
+socket.on("waitingForPlayers", function (data) {
+  $(".waiting-for-players").removeClass("hidden");
+  $(".waiting-for-players>ul").empty();
+  data.players.forEach(function (player) {
+    $(".waiting-for-players>ul").append("<li>" + player + "</li>");
+  });
+});
+
 socket.on("startPlay", function (data) {
-  console.log("game started");
+  $(".waiting-for-players").addClass("hidden");
   $("#gameBoard").removeClass("hidden");
   $(".current-round").text("Round " + data.round);
   let player_count = data.redTeam.length + data.blueTeam.length;
@@ -300,6 +313,7 @@ socket.on("playerTurn", function (data) {
 socket.on("nextRound", function (data) {
   $(".current-round").text("Round " + data.round);
   $("#instructions").removeClass("hidden");
+  $(".round-instructions").addClass("hidden");
   $(".round" + data.round).removeClass("hidden");
   $(".done-instructions").off();
   $(".done-instructions").click(function () {

@@ -26,10 +26,10 @@ def on_join():
         # First player is made a host
         if len(rooms[room_id].players) == 1:
             rooms[room_id].host = session.get('username')
-            emit("host", room=rooms[room_id].players[rooms[room_id].host])
+            emit("host", {'started': rooms[room_id].started }, room=rooms[room_id].players[rooms[room_id].host])
         # Updates the player list
         emit("updatePlayerList", {'players': rooms[room_id].players, 'host': rooms[room_id].host}, room=room_id)
-        emit("host", room=rooms[room_id].players[rooms[room_id].host])
+        emit("host", {'started': rooms[room_id].started},room=rooms[room_id].players[rooms[room_id].host])
         # Sends message
         send(session.get('username') + ' has entered the room.', room=room_id)
 
@@ -38,13 +38,15 @@ def on_rejoin(room_id):
     room = rooms[room_id]
     join_room(room_id)
     emit("updatePlayerList", {'players': rooms[room_id].players, 'host': rooms[room_id].host}, room=room_id)
-    emit("host", room=rooms[room_id].players[rooms[room_id].host])
+    emit("host", {'started': rooms[room_id].started},room=rooms[room_id].players[rooms[room_id].host])
     send(session.get('username') + ' has rejoined the room.', room=room_id)
     if room.started:
         emit("gameStarted", room=request.sid)
-        if len(room.wordDict[session.get('username')]) != room.wordsPerPlayer:
-            print(len(room.wordDict[ session.get('username')]))
-            emit("getWords", {'wordsPerPlayer': rooms[room_id].wordsPerPlayer, 'index': len(room.wordDict[ session.get('username')])}, room=request.sid)
+        if len(room.wordlist) != room.wordsPerPlayer * len(room.players):
+            if len(room.wordDict[session.get("username")]) < room.wordsPerPlayer:
+                emit("getWords", {'wordsPerPlayer': room.wordsPerPlayer, 'index': len(room.wordDict[ session.get('username')])}, room=request.sid)
+            else:
+                emit("waitingForPlayers", {'players': [x for x in rooms[room_id].wordDict.keys() if len(rooms[room_id].wordDict[x]) < rooms[room_id].wordsPerPlayer]},room=request.sid)
         else:
             # Create teams
             emit("startPlay", {'round': rooms[room_id].round, 'redTeam': rooms[room_id].redTeam, 'blueTeam': rooms[room_id].blueTeam, 'players': rooms[room_id].players}, room=request.sid)
@@ -52,7 +54,7 @@ def on_rejoin(room_id):
             # Start the turn of the next player
             emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=request.sid)
             if room.currentPlayer ==  session.get('username'):
-                emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+                emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=request.sid)
         
     
 
@@ -116,6 +118,9 @@ def add_word(data):
         # Start the turn of the next player
         emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=room_id)
         emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+    else:
+        emit("waitingForPlayers", {'players': [x for x in rooms[room_id].wordDict.keys() if len(rooms[room_id].wordDict[x]) < rooms[room_id].wordsPerPlayer]},room=room_id)
+
 
 @socketio.on("endTurn")
 def end_turn(data):

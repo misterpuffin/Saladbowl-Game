@@ -86,6 +86,15 @@ li {
   order: 2;
 }
 
+.waiting-for-players {
+  margin: auto;
+  order: 2;
+}
+
+.waiting-for-players > ul > li {
+  text-align: center;
+}
+
 #showChat {
   order: 3;
   display: none;
