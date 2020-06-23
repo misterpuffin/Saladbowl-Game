@@ -119,26 +119,39 @@ def add_word(data):
         emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=room_id)
         emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
     else:
-        emit("waitingForPlayers", {'players': [x for x in rooms[room_id].wordDict.keys() if len(rooms[room_id].wordDict[x]) < rooms[room_id].wordsPerPlayer]},room=room_id)
+        emit("waitingForPlayers", {'players': [x for x in rooms[room_id].wordDict.keys() if len(rooms[room_id].wordDict[x]) < rooms[room_id].wordsPerPlayer]},room=request.sid)
 
 
 @socketio.on("endTurn")
 def end_turn(data):
-    print("ENDED")
     correctWords = data['correctWords']
     room_id = session.get("room")
     rooms[room_id].endTurn(correctWords)
-    rooms[room_id].getNextPlayer()
-    if len(rooms[room_id].currentWordList) == 0:
+    if len(rooms[room_id].currentWordList) != 0:
+        rooms[room_id].getNextPlayer()
+        emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=room_id)
+        emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+    elif len(rooms[room_id].currentWordList) == 0:
         if rooms[room_id].round == 3:
+            if rooms[room_id].blueScore > rooms[room_id].redScore:
+                winner = 1
+            elif rooms[room_id].blueScore < rooms[room_id].redScore: 
+                winner = 2
+            else: 
+                winner = 3
+            emit("gameEnded", {'winner': winner}, room=room_id)
             rooms[room_id].endGame()
             # Temporary way to stop the game
             del rooms[room_id]
-            emit("gameEnded", room=room_id)
             return
         else:
             rooms[room_id].startNextRound()
             emit("nextRound", {'round': rooms[room_id].round}, room=room_id)
-    emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=room_id)
-    emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+        if data['timeLeft'] < 5: #Only continues the player's turn if there is significant time left
+            rooms[room_id].getNextPlayer()
+            emit("yourTurn", {'turnTimer': rooms[room_id].turnTimer, 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+        else: 
+            emit("yourTurn", {'turnTimer': data['timeLeft'], 'currentWordList': rooms[room_id].currentWordList }, room=rooms[room_id].players[rooms[room_id].currentPlayer])
+        emit("playerTurn", {'players': rooms[room_id].players, 'currentPlayer': rooms[room_id].currentPlayer, 'redScore': rooms[room_id].redScore, 'blueScore': rooms[room_id].blueScore}, room=room_id)
+        
     

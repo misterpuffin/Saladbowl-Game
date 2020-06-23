@@ -2,6 +2,8 @@
 .vscode
 venv
 .env
-__pycache__/
+__pycache__
+game/__pycache__
+app/__pycache__
 Procfile.windows
 flask_session

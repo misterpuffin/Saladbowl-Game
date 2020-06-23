@@ -255,6 +255,7 @@ socket.on("yourTurn", function (data) {
           $("#your-turn").addClass("hidden");
           socket.emit("endTurn", {
             correctWords: correctWords,
+            timeLeft: 0,
           });
         }, 5000);
       }
@@ -276,7 +277,7 @@ socket.on("yourTurn", function (data) {
         $("#your-turn").addClass("hidden");
         socket.emit("endTurn", {
           correctWords: correctWords,
-          room: room_id,
+          timeLeft: timeLeft,
         });
       }, 5000);
     } else $("#current-word>h3").text(data.currentWordList[wordIndex]);
@@ -296,7 +297,7 @@ socket.on("yourTurn", function (data) {
         $("#your-turn").addClass("hidden");
         socket.emit("endTurn", {
           correctWords: correctWords,
-          room: room_id,
+          timeLeft: timeLeft,
         });
       }, 5000);
     } else $("#current-word>h3").text(data.currentWordList[wordIndex]);
@@ -324,6 +325,18 @@ socket.on("nextRound", function (data) {
 
 socket.on("gameEnded", function (data) {
   $(".current-round").text("Game Ended!");
+  switch (data.winner) {
+    case 1:
+      $(".player-turn").html("<span style='color:blue'>Blue wins!</span>");
+      break;
+    case 2:
+      $(".player-turn").html("<span style='color:red'>Red wins!</span>");
+      break;
+    default:
+      $(".player-turn").text("It's a Tie!");
+      break;
+  }
+
   var timeout = setTimeout(function () {
     location.reload();
   }, 10000);

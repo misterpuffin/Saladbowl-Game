@@ -17,10 +17,17 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .hidden {
   display: none;
+}
+
+.saladbowl-logo {
+  width: 30%;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {

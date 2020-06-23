@@ -31,6 +31,7 @@ class Room():
 
         #turn info
         self.currentPlayer = None
+        self.timeLeft = None
         self.currentWordList = None
 
         
