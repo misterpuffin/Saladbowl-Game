@@ -24,3 +24,18 @@ Stages:
   
  Screenshots:
  
+  <img src=“https://raw.githubusercontent.com/misterpuffin/Saladbowl-Game/master/Salad%20Bowl%20Screenshots/home%20screen.png”>
+  Home Screen
+ 
+  <img src=“https://raw.githubusercontent.com/misterpuffin/Saladbowl-Game/master/Salad%20Bowl%20Screenshots/waiting%20lobby.png”>
+  Waiting Lobby
+  
+  <img src=“https://raw.githubusercontent.com/misterpuffin/Saladbowl-Game/master/Salad%20Bowl%20Screenshots/in-game%20chat.png”>
+  In Game Chat
+  
+  <img src=“https://raw.githubusercontent.com/misterpuffin/Saladbowl-Game/master/Salad%20Bowl%20Screenshots/instructions.png”>
+  Instructions
+  
+  <img src=“https://raw.githubusercontent.com/misterpuffin/Saladbowl-Game/master/Salad%20Bowl%20Screenshots/word%20with%20timer.png”>
+  Word card with timer 
+ 
