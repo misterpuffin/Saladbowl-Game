@@ -19,3 +19,8 @@ Stages:
   - In-game option to draw (instead of charades) - this allows the game to be played using only the website
   - Game options to rejoin the same room after a game. (EASY)
   - Allow for "free-for-all" game option (keep track of individual player's score)
+  - Bug fixing for when players leave the game, rejoin if disconnected.
+  
+  
+ Screenshots:
+ 
